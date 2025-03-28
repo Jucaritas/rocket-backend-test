@@ -1,80 +1,167 @@
+# NestJS Backend con TypeORM y MariaDB
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-  </p>
+</p>
 
-  # NestJS Backend con TypeORM y MariaDB
+## Descripción General
 
-  Aplicación backend construida utilizando el framework NestJS, TypeORM con base de datos MariaDB.
+Aplicación backend construida utilizando el framework NestJS, TypeORM con base de datos MariaDB, diseñada para la gestión de artículos con autenticación JWT.
 
-  ## Requisitos
+## Tecnologías y Decisiones de Arquitectura
 
-  - Node.js v22.x o mayor
-  - Base de datos MariaDB
-  - CLI de NestJS previamente instalado con el comando `npm install -g @nestjs/cli`
+### Stack Tecnológico
+- **Backend**: NestJS (Framework de Node.js)
+- **ORM**: TypeORM
+- **Base de Datos**: MariaDB
+- **Autenticación**: JWT (JSON Web Tokens)
+- **Contenerización**: Docker
+- **Documentación de API**: Swagger
 
-  ## Servidor de Desarrollo
+#### Framework - NestJS
+- **Razones de elección**:
+  - Arquitectura modular y escalable basada en módulos, controladores y servicios
+  - Soporte nativo para TypeScript
+  - Integración sencilla con diferentes bases de datos y librerías
+  - Excelente rendimiento y tipado fuerte
 
-  1. Instalar las dependencias usando npm o yarn:
+#### ORM - TypeORM  
+- **Motivaciones**:
+  - Soporte nativo para TypeScript
+  - Mapeo de entidades simple y declarativo
+  - Generación automática de migraciones
+  - Abstracción de la lógica de acceso a datos
+  - Facilita la definición de relaciones entre entidades
 
-    ```bash
-    npm install
-    # o
-    yarn
-    ```
+#### Autenticación - JWT
+- **Implementación**:
+  - Protección de rutas mediante tokens
+  - Generación de tokens con información de usuario
+  - Estrategia de autenticación basada en Guards de NestJS
+  - Tiempo de expiración configurable
+  - Validación y gestión segura de credenciales
 
-  2. Crear una copia del archivo `.env.template` y renombrarlo como `.env`. Se deben actualizar las credenciales para conectar con la base de datos en el archivo `.env`, así como el secreto y tiempo de vida del token `JWT` generado:
+#### Contenerización - Docker  
+- **Beneficios**:
+  - Entorno de desarrollo consistente
+  - Facilidad de despliegue
+  - Aislamiento de servicios
+  - Configuración mediante docker-compose
+  - Portabilidad entre diferentes entornos
 
-    ```
-     # DATABASE CONFIGURATION
-     # comentar localhost y descomentar db para docker
-     DB_HOST=localhost
-     # DB_HOST=db
-     DB_PORT=3306
-     DB_USERNAME=root
-     DB_PASSWORD=toor
-     DB_DATABASE=rocket
+## Requisitos Previos
 
-     # JWT CONFIGURATION
-     JWT_SECRET=@@SecretD3v3l0pm3n7@_2025
-     JWT_EXPIRES_IN=1h
-    ```
+- Node.js v22.x o mayor
+- Base de datos MariaDB
+- Docker (opcional, para despliegue)
+- CLI de NestJS (`npm install -g @nestjs/cli`)
 
-  3. Iniciar el servidor de desarrollo con los siguientes comandos:
+## Configuración y Desarrollo Local
 
-    ```bash
-    npm run start:dev
-    # o
-    yarn start:dev
-    ```
+1. Clonar el repositorio
+```bash
+git clone https://github.com/Jucaritas/rocket-backend-test.git
+cd rocket-backend-test
+```
 
-  4. Para comenzar a registrar información, se puede acceder a la documentación Swagger en la ruta:
+2. Instalar dependencias
+```bash
+npm install
+# o
+yarn
+```
 
-    ```bash
-    http://localhost:3000/api/docs
-    ```
+3. Configurar variables de entorno
+- Copiar `.env.template` a `.env`
+- Actualizar configuraciones de base de datos y JWT
 
-  ## Despliegue en Producción (Docker)
+4. Iniciar servidor de desarrollo
+```bash
+npm run start:dev
+# o
+yarn start:dev
+```
 
-  Para ejecutar la aplicación en `Docker`, en el archivo `.env`, cambiar el `DB_HOST` de `localhost` a `db`, para tomar el host del contenedor.
+5. Acceder a documentación Swagger
+```
+http://localhost:3000/api/docs
+```
 
-  1. Construir la imagen Docker:
+## Despliegue con Docker
 
-    ```bash
-    docker compose build
-    ```
+1. Ajustar `DB_HOST` en `.env` a `db`
 
-  2. Iniciar el contenedor `Docker`:
+2. Construir imagen Docker
+```bash
+docker compose build
+```
 
-    ```bash
-    docker compose up -d
-    ```
+3. Iniciar contenedores
+```bash
+docker compose up -d
+```
 
-  3. Eliminar recursos no usados en `Docker`:
+## Endpoints Principales
 
-    ```bash
-    docker system prune -f
-    ```
+- `POST /auth/login`: Autenticación
+- `POST /auth/register`: Autenticación
+- `GET /articles`: Listar artículos
+- `GET /articles/:id`: Obtener artículo por id
+- `POST /articles`: Crear artículo
+- `PUT /articles/:id`: Actualizar artículo
+- `DELETE /articles/:id`: Eliminar artículo
 
-    (En Windows se deben ejecutar los comandos por separado).
+## Consideraciones de Seguridad
+- Tokens JWT con tiempo de expiración configurable
+- Protección contra inyección SQL mediante TypeORM
+- Validación de datos de entrada
+- Guards e interceptores para control de acceso
+- Documentación de API securizada
 
-  La aplicación debería ejecutarse en un entorno de producción.
+## Configuración de Entorno
+
+### Variables de Entorno
+```
+# Configuración de Base de Datos
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=toor
+DB_DATABASE=rocket
+
+# Configuración JWT
+JWT_SECRET=@@SecretD3v3l0pm3n7@_2025
+JWT_EXPIRES_IN=1h
+```
+
+## Mejoras Futuras
+- Implementar refresh tokens
+- Configurar CI/CD
+- Mejorar validación de datos
+- Implementar logging avanzado
+
+## Comandos Útiles
+
+### Desarrollo
+```bash
+# Modo desarrollo
+npm run start:dev
+
+# Construcción
+npm run build
+
+# Pruebas
+npm run test
+```
+
+### Docker
+```bash
+# Construir imagen
+docker compose build
+
+# Iniciar contenedores
+docker compose up -d
+
+# Eliminar recursos no utilizados
+docker system prune -f
+```
