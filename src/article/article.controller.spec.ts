@@ -60,4 +60,30 @@ describe('ArticleController', () => {
       expect(service.addNewArticle).toHaveBeenCalledWith(articleDto);
     });
   });
+
+  describe('deleteArticle', () => {
+    it('should delete an article and return success response', async () => {
+      const expectedResponse: SuccessResponseDto = {
+        statusCode: 200,
+        message: 'Article deleted successfully',
+        timestamp: new Date().toISOString(),
+      };
+
+      (service.deleteArticle as jest.Mock).mockResolvedValue(expectedResponse);
+
+      const result = await controller.deleteArticle('1');
+
+      expect(service.deleteArticle).toHaveBeenCalledWith(1);
+      expect(result).toEqual(expectedResponse);
+    });
+
+    it('should propagate error when service throws an exception', async () => {      
+      const errorResponse = new Error('Article not found');
+      (service.deleteArticle as jest.Mock).mockRejectedValue(errorResponse);
+
+      await expect(controller.deleteArticle('999')).rejects.toThrow('Article not found');
+      
+      expect(service.deleteArticle).toHaveBeenCalledWith(999);
+    });
+  });
 });
