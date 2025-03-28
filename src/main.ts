@@ -20,8 +20,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('🚀 Rocket Reto Técnico')
-    .setDescription('API para el reto técnico de Rocket')
+    .setTitle('🚀 Rocket API REST')
+    .setDescription('API para el TEST de Rocket')
     .setVersion('1.0')
     .addTag('Articles')
     .addBearerAuth()

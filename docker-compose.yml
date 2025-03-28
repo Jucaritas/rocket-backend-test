@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 
 services:
   backend:
@@ -15,7 +15,7 @@ services:
       - DATABASE_PORT=${DB_PORT} 
       - DATABASE_USER=${DB_USERNAME}
       - DATABASE_PASSWORD=${DB_PASSWORD}
-      - DATABASE_NAME=${DB_NAME}
+      - DATABASE_NAME=${DB_DATABASE}
   phpmyadmin:
     links:
       - db
@@ -32,7 +32,7 @@ services:
     container_name: db_server_mariadb
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
