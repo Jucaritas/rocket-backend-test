@@ -4,7 +4,7 @@ import { ArticleService } from './article.service';
 import { ArticleRequestDto } from './dto/article-request.dto';
 import { SuccessResponseDto } from './dto/success-response.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { MockAuthGuard } from '../auth/guard/user-role.guard.spec';
+import { MockAuthGuard } from '../auth/guard/mock-user-role.guard';
 
 describe('ArticleController', () => {
   let controller: ArticleController;

@@ -6,12 +6,24 @@ import { ArticleResponseDto } from './dto/article-responde.dto';
 import { SuccessResponseDto } from './dto/success-response.dto';
 import { Auth } from '../auth/decorators/auth.decorator';
 
+/**
+ * Controlador para gestionar las operaciones relacionadas con los artículos.
+ */
 @ApiTags('Articles')
 @Controller('article')
 @ApiBearerAuth()
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  /**
+   * Constructor del controlador de artículos.
+   * @param articleService Servicio para manejar la lógica de negocio de los artículos.
+   */
+  constructor(private readonly articleService: ArticleService) { }
 
+  /**
+   * Endpoint para crear un nuevo artículo.
+   * @param articleRequestDto Datos del artículo a crear.
+   * @returns Una promesa que resuelve con una respuesta de éxito.
+   */
   @Post()
   @Auth()
   @ApiOperation({ summary: 'Crear un nuevo artículo' })
@@ -21,6 +33,10 @@ export class ArticleController {
     return this.articleService.addNewArticle(articleRequestDto);
   }
 
+  /**
+   * Endpoint para obtener todos los artículos.
+   * @returns Una promesa que resuelve con una lista de artículos.
+   */
   @Get()
   @Auth()
   @ApiOperation({ summary: 'Obtener todos los artículos' })
@@ -29,6 +45,11 @@ export class ArticleController {
     return this.articleService.getAllArticles();
   }
 
+  /**
+   * Endpoint para obtener un artículo por su ID.
+   * @param id ID del artículo a buscar.
+   * @returns Una promesa que resuelve con los datos del artículo encontrado.
+   */
   @Get(':id')
   @Auth()
   @ApiOperation({ summary: 'Obtener un artículo por ID' })
@@ -39,6 +60,12 @@ export class ArticleController {
     return this.articleService.getArticleById(+id);
   }
 
+  /**
+   * Endpoint para actualizar un artículo.
+   * @param id ID del artículo a actualizar.
+   * @param articleRequestDto Datos actualizados del artículo.
+   * @returns Una promesa que resuelve con una respuesta de éxito.
+   */
   @Put(':id')
   @Auth()
   @ApiOperation({ summary: 'Actualizar un artículo' })
@@ -50,6 +77,11 @@ export class ArticleController {
     return this.articleService.updateArticle(+id, articleRequestDto);
   }
 
+  /**
+   * Endpoint para eliminar un artículo.
+   * @param id ID del artículo a eliminar.
+   * @returns Una promesa que resuelve con una respuesta de éxito.
+   */
   @Delete(':id')
   @Auth()
   @ApiOperation({ summary: 'Eliminar un artículo' })

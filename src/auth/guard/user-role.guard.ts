@@ -4,6 +4,15 @@ import { Observable } from 'rxjs';
 import { User } from '../entities/user.entity';
 import { META_ROLES } from '../decorators/role-protected.decorator';
 
+/**
+ * Guard para verificar si un usuario tiene los roles necesarios para acceder a una ruta.
+ * 
+ * Este guard utiliza para obtener los roles válidos
+ * definidos en el controlador o en el manejador de la ruta. Si el usuario no tiene
+ * un rol válido, se lanza una excepción `ForbiddenException`.
+ * 
+ * @class
+ */
 @Injectable()
 export class UserRoleGuard implements CanActivate {
   
@@ -11,6 +20,15 @@ export class UserRoleGuard implements CanActivate {
     private readonly reflector: Reflector
   ) {}
 
+  /**
+   * Método principal que determina si un usuario puede acceder a una ruta protegida.
+   * 
+   * @param context - Contexto de ejecución que proporciona detalles sobre la solicitud
+   * actual, incluyendo el manejador y el controlador.
+   * @returns `true` si el usuario tiene un rol válido, de lo contrario lanza una excepción.
+   * @throws {BadRequestException} Si no se encuentra un usuario en la solicitud.
+   * @throws {ForbiddenException} Si el usuario no tiene un rol válido para acceder a la ruta.
+   */
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {

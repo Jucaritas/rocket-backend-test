@@ -7,15 +7,32 @@ import { LoginUserDto, CreateUserDto } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 
+/**
+ * Servicio de autenticación que maneja la creación de usuarios, inicio de sesión y generación de tokens JWT.
+ */
 @Injectable()
 export class AuthService {
   
+  /**
+   * Constructor del servicio de autenticación.
+   * 
+   * @param userRepository Repositorio de usuarios para interactuar con la base de datos.
+   * @param jwtService Servicio para la generación y verificación de tokens JWT.
+   */
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ){}
 
+  /**
+   * Crea un nuevo usuario en la base de datos y genera un token JWT para el usuario.
+   * 
+   * @param createUserDto Objeto con los datos necesarios para crear un usuario.
+   * @returns Un objeto que contiene el usuario creado y un token JWT.
+   * @throws BadRequestException Si ocurre un error relacionado con la base de datos.
+   * @throws InternalServerErrorException Si ocurre un error inesperado.
+   */
   async create(createUserDto: CreateUserDto) {
     try {
       const {password, ...userData} = createUserDto;
@@ -35,6 +52,15 @@ export class AuthService {
     }
   }
 
+  /**
+   * Inicia sesión de un usuario verificando sus credenciales y genera un token JWT.
+   * 
+   * @param loginUserDto Objeto con las credenciales del usuario (email y contraseña).
+   * @returns Un objeto que contiene los datos del usuario y un token JWT.
+   * @throws UnauthorizedException Si las credenciales no son válidas.
+   * @throws BadRequestException Si ocurre un error relacionado con la base de datos.
+   * @throws InternalServerErrorException Si ocurre un error inesperado.
+   */
   async loginUser(loginUserDto: LoginUserDto){
     console.log('User Logged: ',loginUserDto.email)
     try {      
@@ -61,11 +87,25 @@ export class AuthService {
     }
   }
 
+  /**
+   * Genera un token JWT basado en el payload proporcionado.
+   * 
+   * @param payload Objeto que contiene la información que se incluirá en el token JWT.
+   * @returns Un token JWT como string.
+   */
   private getJwtToken( payload: JwtPayload ) {
     const token = this.jwtService.sign( payload );
     return token;
   }
 
+  /**
+   * Maneja errores relacionados con la base de datos y lanza excepciones específicas.
+   * 
+   * @param error Objeto de error capturado.
+   * @throws BadRequestException Si hay un conflicto de datos (por ejemplo, email duplicado).
+   * @throws UnauthorizedException Si el error está relacionado con credenciales no válidas.
+   * @throws InternalServerErrorException Para errores inesperados.
+   */
   private handleDBError(error:any){
   
     if(error.errno && error.errno == 1062)
