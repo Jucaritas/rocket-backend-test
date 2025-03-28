@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs_backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=${DB_HOST}
+      - DATABASE_PORT=${DB_PORT} 
+      - DATABASE_USER=${DB_USERNAME}
+      - DATABASE_PASSWORD=${DB_PASSWORD}
+      - DATABASE_NAME=${DB_NAME}
+  phpmyadmin:
+    links:
+      - db
+    ports:
+      - "8181:80"
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:5
+    environment:
+      PMA_HOST: "db"
+  db:
+    image: mariadb:10.9
+    restart: always
+    command: mysqld --sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+    container_name: db_server_mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql/data/
+      - mariadb_logs:/var/lib/mysql/logs/
+volumes:
+  mariadb_data:
+  mariadb_logs:
