@@ -2,9 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { InterceptorService } from './interceptor.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Registrar el interceptor a nivel global
+  app.useGlobalInterceptors(new InterceptorService());
   
   app.enableCors({
     origin: '*',

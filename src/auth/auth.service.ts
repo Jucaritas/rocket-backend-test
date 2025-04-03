@@ -62,7 +62,7 @@ export class AuthService {
    * @throws InternalServerErrorException Si ocurre un error inesperado.
    */
   async loginUser(loginUserDto: LoginUserDto){
-    console.log('User Logged: ',loginUserDto.email)
+    // console.log('User Logged: ',loginUserDto.email)
     try {      
       const user = await this.userRepository.findOne({ 
         where: { email: loginUserDto.email },
